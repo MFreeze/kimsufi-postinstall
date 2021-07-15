@@ -1,1 +1,18 @@
 #!/usr/bin/env bash
+
+upgrade() {
+    apt-get --assume-yes update
+    apt-get --assume-yes upgrade
+    apt-get --assume-yes dist-upgrade
+}
+
+install_base_pkg() {
+    apt-get --assume-yes install $(wget --no-check-certificate -O - "${URI_ROOT}resources/package-list" | xargs)
+}
+
+main() {
+    upgrade
+    install_base_pkg
+}
+
+main

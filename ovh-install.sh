@@ -9,7 +9,7 @@ GITHUB_REPO=kimsufi-postinstall
 GITHUB_BRANCH=main
 
 # Remote scripts URI root
-URI_ROOT="https://raw.githubusercontent.com/"\
+export URI_ROOT="https://raw.githubusercontent.com/"\
     "${GITHUB_USER}/"\
     "${GITHUB_REPO}/"\
     "${GITHUB_BRANCH}/"

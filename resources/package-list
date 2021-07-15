@@ -1,0 +1,7 @@
+sudo
+tmux
+bash-completion
+zsh
+ca-certificates
+git
+lm-sensors
