@@ -11,8 +11,9 @@ install_base_pkg() {
 }
 
 main() {
-    upgrade
-    install_base_pkg
+    upgrade || return 1
+    install_base_pkg || return 1
+    return 0
 }
 
 main

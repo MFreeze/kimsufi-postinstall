@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# XXX Handle error in the loop
 create_users() {
     while read line; do
         if [ ! -z "${line}" ]; then
@@ -43,6 +44,8 @@ create_users() {
             echo "===============================\n"
         fi
     done <(wget --no-check-certificate -O - "${URI_ROOT}resources/user_list")
+
+    return 0
 }
 
 ssh_config() {
@@ -52,11 +55,13 @@ ssh_config() {
     sed -i 's/#\? *\(PubkeyAuthentication\)\ no/\1\ yes/g' /etc/ssh/sshd_config
 
     service ssh restart
+    return 0
 }
 
 main() {
-    create_users
-    ssh_config
-}
+    create_users || return 1
+    ssh_config || return 1
+    return 0
+} 
 
 main
