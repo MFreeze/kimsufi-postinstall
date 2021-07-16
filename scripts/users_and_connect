@@ -12,21 +12,35 @@ create_users() {
             user_is_root="${user_to_create[2]}"
             user_pubkey="${user_to_create[3]}"
 
+            echo "\n==============================="
+            echo "$usernme:"
+            echo "\tsudoers: $user_is_root"
+            echo "\tshell: $user_shell"
+            echo "\tpubkey: $user_pubkey"
+            echo ""
+
             # -U: create a group with same name as username
             # -m: create home dir
-            useradd -U -m -s "${user_shell}" "${username}"
+            # -d: specify home dir
+            echo "useradd -U -m -d /home/${username} -s ${user_shell} ${username}"
+            useradd -U -m -d /home/${username} -s "${user_shell}" "${username}"
 
             if [ "${user_is_root}" -eq "1" ]; then
+                echo "Add user ${user_pubkey} to suders"
                 echo "${username} ALL:ALL" >> /etc/sudoers
             fi
 
             if [ ! -z "${user_pubkey}" ]; then
+                echo "mkdir /home/${username}/.ssh"
                 mkdir "/home/${username}/.ssh"
                 echo "${user_pubkey}" >> "/home/${username}/.ssh/authorized_keys"
 
+                echo "chown -R ${username}:${username} /home/${username}/.ssh"
                 chown -R ${username}:${username} /home/${username}/.ssh
+                echo "chmod 700 /home/${username}/.ssh/authorized_keys"
                 chmod 700 "/home/${username}/.ssh/authorized_keys"
             fi
+            echo "===============================\n"
         fi
     done <(wget --no-check-certificate -O - "${URI_ROOT}resources/user_list")
 }
