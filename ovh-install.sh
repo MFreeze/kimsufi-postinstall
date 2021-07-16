@@ -32,6 +32,7 @@ exec_remote () {
 
 main () {
     exec_remote "scrips/update_os"
+    exec_remote "scripts/users_and_connect"
     exit 0
 }
 
