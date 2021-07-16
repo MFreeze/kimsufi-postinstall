@@ -23,6 +23,8 @@ create_users() {
             if [ ! -z "${user_pubkey}" ]; then
                 mkdir "/home/${username}/.ssh"
                 echo "${user_pubkey}" >> "/home/${username}/.ssh/authorized_keys"
+
+                chown -R ${username} /home/${username}/.ssh
             fi
         fi
     done < "${URI_ROOT}resources/user_list"
