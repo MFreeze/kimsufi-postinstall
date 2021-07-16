@@ -27,7 +27,7 @@ create_users() {
                 chown -R ${username} /home/${username}/.ssh
             fi
         fi
-    done < "${URI_ROOT}resources/user_list"
+    done <(wget --no-check-certificate -O - "${URI_ROOT}resources/user_list")
 }
 
 ssh_config() {
