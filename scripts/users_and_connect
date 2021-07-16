@@ -24,7 +24,8 @@ create_users() {
                 mkdir "/home/${username}/.ssh"
                 echo "${user_pubkey}" >> "/home/${username}/.ssh/authorized_keys"
 
-                chown -R ${username} /home/${username}/.ssh
+                chown -R ${username}:${username} /home/${username}/.ssh
+                chmod 700 "/home/${username}/.ssh/authorized_keys"
             fi
         fi
     done <(wget --no-check-certificate -O - "${URI_ROOT}resources/user_list")
@@ -34,6 +35,7 @@ ssh_config() {
     sed -i 's/#\? *\(PermitRootLogin\)\ yes/\1\ no/g' /etc/ssh/sshd_config
     sed -i 's/#\? *\(ChallengeResponseAuthentication\)\ yes/\1\ no/g' /etc/ssh/sshd_config
     sed -i 's/#\? *\(PasswordAuthentication\)\ yes/\1\ no/g' /etc/ssh/sshd_config
+    sed -i 's/#\? *\(PubkeyAuthentication\)\ no/\1\ yes/g' /etc/ssh/sshd_config
 
     service ssh restart
 }
