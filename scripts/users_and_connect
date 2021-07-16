@@ -43,7 +43,7 @@ create_users() {
             fi
             echo "===============================\n"
         fi
-    done <(wget --no-check-certificate -O - "${URI_ROOT}resources/user_list")
+    done < <(wget --no-check-certificate -O - "${URI_ROOT}resources/user_list")
 
     return 0
 }
