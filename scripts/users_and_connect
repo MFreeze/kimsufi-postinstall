@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+create_users() {
+    while read line; do
+        if [ ! -z "${line}" ]; then
+            user_to_create=""
+            # username;shell;root;pubkey
+            IFS=";" user_to_create=( $line )
+
+            [ -z "${user_to_create[1]}" ] && user_shell="/bin/bash" || user_shell="$(which "${user_to_create[1]}")"
+            username="${user_to_create[0]}"
+            user_is_root="${user_to_create[2]}"
+            user_pubkey="${user_to_create[3]}"
+
+            # -U: create a group with same name as username
+            # -m: create home dir
+            useradd -U -m -s "${user_shell}" "${username}"
+
+            if [ "${user_is_root}" -eq "1" ]; then
+                echo "${username} ALL:ALL" >> /etc/sudoers
+            fi
+
+            if [ ! -z "${user_pubkey}" ]; then
+                mkdir "/home/${username}/.ssh"
+                echo "${user_pubkey}" >> "/home/${username}/.ssh/authorized_keys"
+            fi
+        fi
+    done < "${URI_ROOT}resources/user_list"
+}
+
+main() {
+    create_users
+}
+
+main
