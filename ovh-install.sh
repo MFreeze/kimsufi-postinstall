@@ -30,8 +30,8 @@ exec_remote () {
 
 
 main () {
-    exec_remote "scripts/update_os" || exit $ERR_UPDATE
-    exec_remote "scripts/users_and_connect" || exit $ERR_USERS
+    exec_remote "scripts/update_os"
+    exec_remote "scripts/users_and_connect"
     exit $ERR_OK
 }
 
