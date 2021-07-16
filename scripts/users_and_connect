@@ -28,8 +28,17 @@ create_users() {
     done < "${URI_ROOT}resources/user_list"
 }
 
+ssh_config() {
+    sed -i 's/#\? *\(PermitRootLogin\)\ yes/\1\ no/g' /etc/ssh/sshd_config
+    sed -i 's/#\? *\(ChallengeResponseAuthentication\)\ yes/\1\ no/g' /etc/ssh/sshd_config
+    sed -i 's/#\? *\(PasswordAuthentication\)\ yes/\1\ no/g' /etc/ssh/sshd_config
+
+    service ssh restart
+}
+
 main() {
     create_users
+    ssh_config
 }
 
 main
